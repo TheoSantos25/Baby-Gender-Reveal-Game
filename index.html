@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Theo & Alisha Shakya's Ultimate Baby Reveal!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Chewy&family=Lobster&family=Pacifico&family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            font-family: 'Poppins', sans-serif;
+            color: #1a202c;
+        }
+
+        #gameWrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #bokehBackground {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0; 
+            background: linear-gradient(135deg, #f3f4f6, #d1d5db); /* Default Glossy Grey */
+            animation: subtle-gradient-shift 20s ease-in-out infinite alternate;
+        }
+        @keyframes subtle-gradient-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .bokeh-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0; 
+            animation: floatBokeh 20s infinite ease-in-out;
+            filter: blur(5px); 
+            pointer-events: none;
+        }
+        @keyframes floatBokeh {
+            0%, 100% { transform: translateY(10vh) scale(0.8); opacity: 0; }
+            25% { opacity: 0.15; } 
+            50% { transform: translateY(-20vh) scale(1.2); opacity: 0.25; }
+            75% { opacity: 0.1; }
+        }
+
+
+        .game-screen-visibility {
+            width: 100%;
+            height: 100%;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            padding: 0.5rem; 
+            z-index: 1; 
+        }
+        .game-screen-visibility.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10; 
+        }
+      
+        #revealScreen.active { 
+            background-image: linear-gradient(rgba(30, 144, 255, 0.65), rgba(0, 100, 200, 0.75)), url('https://i.imgur.com/EWm3Cjd.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            animation: none; 
+            transition: background-image 2s ease-in-out; 
+        }
+        #revealScreen.active.background-image-enhanced {
+             background-image: linear-gradient(rgba(30, 144, 255, 0.35), rgba(0, 100, 200, 0.45)), url('https://i.imgur.com/EWm3Cjd.jpeg');
+        }
+
+        .font-fredoka { font-family: 'Fredoka One', cursive; }
+        .font-chewy { font-family: 'Chewy', cursive; }
+        .font-lobster { font-family: 'Lobster', cursive; }
+        .font-pacifico { font-family: 'Pacifico', cursive; }
+        .font-bangers { font-family: 'Bangers', cursive; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+
+        .animated-heading-gradient {
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(60deg, #FFD700, #C0C0C0, #FFA500, #a7f3d0, #FFD700); 
+            background-size: 400% 400%;
+            animation: heading-gradient-flow 6s ease-in-out infinite;
+        }
+        @keyframes heading-gradient-flow { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; }
+        }
+        
+        .pulse-button { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(156, 163, 175, 0.7); } 
+            70% { transform: scale(1.05); box-shadow: 0 0 10px 20px rgba(156, 163, 175, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(156, 163, 175, 0); }
+        }
+
+        .bobbing-icon { animation: bobbing 1.5s ease-in-out infinite; }
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); }
+        }
+
+        .puzzle-piece-idle {
+            animation: sway 3s ease-in-out infinite; cursor: pointer; transition: filter 0.3s ease; 
+        }
+        .puzzle-piece-idle:hover { filter: brightness(1.1); }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-1deg) scale(1); } 50% { transform: rotate(1deg) scale(1.02); }
+        }
+        
+        .puzzle-piece-svg text {
+            font-weight: bold; text-anchor: middle; dominant-baseline: middle; pointer-events: none;
+        }
+        
+        .animated-qmark {
+            display: inline-block; animation: qmark-color-change 2s infinite;
+        }
+        @keyframes qmark-color-change {
+            0%, 100% { fill: #FFA500; } 
+            50% { fill: #ffee58; } 
+        }
+
+        .word-popup {
+            animation: pop-and-fade 2s ease-out forwards; text-shadow: 2px 2px 0 #FFA500, 4px 4px 0 #ffee58; z-index: 20; 
+        }
+        @keyframes pop-and-fade {
+            0% { transform: scale(0.5) translateY(50px); opacity: 0; }
+            50% { transform: scale(1.1) translateY(0); opacity: 1; }
+            100% { transform: scale(1) translateY(-20px); opacity: 0; }
+        }
+        
+        .pregnancy-hint-anim {
+            position: absolute; font-size: clamp(1.5rem, 4vmin, 2.5rem); animation: hint-pop 1s ease-out forwards; z-index: 15; 
+        }
+        @keyframes hint-pop {
+            0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0); opacity: 0; }
+        }
+
+        .celebration-effects-container, .final-slide-animations {
+            position: absolute; inset: 0; pointer-events: none; overflow: hidden; 
+        }
+
+        .celebration-effects-container .effect-item, 
+        .final-slide-animations .effect-item { 
+            position: absolute; pointer-events: none;
+        }
+
+        .celebration-effects-container .confetti {
+            width: clamp(10px, 2.5vmin, 18px); height: clamp(10px, 2.5vmin, 18px); 
+            background-color: #5e9fff; top: -20px; animation: fall-more-dynamic 3.5s linear infinite; 
+            border-radius: 50%; z-index: 5; 
+        }
+        .celebration-effects-container .confetti.pink { background-color: #ff85c0; }
+        .celebration-effects-container .confetti.yellow { background-color: #ffee58; }
+        .celebration-effects-container .confetti.purple { background-color: #8a2be2; }
+        .celebration-effects-container .confetti.cyan { background-color: #00ffff; }
+
+
+        @keyframes fall-more-dynamic { 
+            0% { transform: translateY(-30px) translateX(0px) rotate(0deg); opacity: 1; }
+            100% { 
+                transform: translateY(110vh) 
+                           translateX(calc( (var(--i, 0) - 50) * 3vw)) 
+                           rotate(calc(var(--i, 0) * 40deg)); 
+                opacity: 0; 
+            }
+        }
+        .celebration-effects-container .starburst { 
+            width: 5px; height: 40px; background: white;
+            box-shadow: 0 0 10px white, 0 0 20px #ffee58; 
+            animation: starburst-anim 1s ease-out forwards;
+            opacity:0;
+        }
+        @keyframes starburst-anim {
+            0% { transform: scaleY(0) scaleX(0.5); opacity: 0.7; }
+            50% { transform: scaleY(1.2) scaleX(1); opacity: 1; }
+            100% { transform: scaleY(0) scaleX(0.5); opacity: 0; }
+        }
+         .celebration-effects-container .reveal-balloon { 
+            font-size: clamp(2.5rem, 6vmin, 5rem); opacity: 0;
+            animation: pop-up-float 5s ease-out forwards;
+        }
+        @keyframes pop-up-float {
+            0% { transform: translateY(20vh) scale(0.5); opacity: 0; }
+            20% { transform: translateY(0vh) scale(1.1); opacity: 0.9; }
+            80% { transform: translateY(-90vh) scale(0.8); opacity: 0.9; }
+            100% { transform: translateY(-110vh) scale(0.7); opacity: 0; }
+        }
+
+
+        /* Reveal Text Animations & Styling */
+        .reveal-text-item {
+            opacity: 0; 
+            transition: opacity 0.5s ease-in-out;
+        }
+        .reveal-text-item.visible {
+            opacity: 1;
+            animation: playful-zoom-reveal 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+        }
+        @keyframes playful-zoom-reveal {
+            0% { transform: scale(0.3); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            80% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        #revealText1 { 
+            font-size: clamp(3.2rem, 10vmin, 6.5rem) !important; 
+            margin-bottom: 0.2em; 
+            color: #00FFFF; 
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00FFFF, 0 0 20px #00BFFF, 0 0 25px #1E90FF, 3px 3px 5px rgba(0,0,0,0.5); 
+        } 
+        #revealText2 { 
+            font-size: clamp(2.4rem, 7.5vmin, 4.8rem) !important; 
+            font-family: 'Pacifico', cursive; 
+            color: #FFD700; 
+            margin-bottom: 0.2em; 
+            text-shadow: 2px 2px 4px #483D8B, 0 0 10px #FFD700; 
+        } 
+        #revealText3 { 
+            font-size: clamp(2.2rem, 6vmin, 4rem) !important; 
+            color: #F0F8FF; 
+            text-shadow: 2px 2px 5px #0000CD; 
+        }
+
+
+        .animated-gradient-button {
+            background-image: linear-gradient(120deg, #ffee58, #ff85c0, #5e9fff, #ffee58); 
+            background-size: 400% 400%; 
+            animation: button-gradient-animation 5s ease infinite;
+        }
+         @keyframes button-gradient-animation {
+            0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+        }
+
+        /* Final Slide Animations */
+        .final-slide-animations .firework-particle {
+            width: 5px; height: 5px; border-radius: 50%; opacity: 0;
+            animation: firework-burst 0.8s ease-out forwards;
+        }
+        @keyframes firework-burst {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(1) translateY(30px); opacity: 0; }
+        }
+
+        .final-slide-animations .balloon {
+            font-size: clamp(2rem, 5vmin, 4rem); opacity: 0.8;
+            animation: float-up-sway 8s ease-in-out infinite;
+        }
+        @keyframes float-up-sway {
+            0% { transform: translateY(10vh) translateX(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            50% { transform: translateY(-80vh) translateX(20px) rotate(10deg); }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) translateX(-20px) rotate(-10deg); opacity: 0; }
+        }
+        .final-slide-animations .shooting-star { 
+            font-size: clamp(1.5rem, 3vmin, 2.5rem);
+            color: #ffee58; 
+            text-shadow: 0 0 5px #fff, 0 0 10px #ffee58;
+            animation: shoot-across 6s linear infinite;
+        }
+        @keyframes shoot-across {
+            0% { transform: translateX(-20vw) translateY(calc(var(--sy, 50) * 1vh)) scale(0.7) rotate(-15deg); opacity: 0;}
+            10% {opacity: 1;  transform: translateX(0vw) translateY(calc(var(--sy, 50) * 1vh - 5vh)) scale(1) rotate(0deg);}
+            90% {opacity: 1; transform: translateX(100vw) translateY(calc(var(--sy, 50) * 1vh - 15vh)) scale(0.7) rotate(15deg);}
+            100% { transform: translateX(120vw) translateY(calc(var(--sy, 50) * 1vh - 20vh)) scale(0.5) rotate(30deg); opacity: 0;}
+        }
+         .final-slide-animations .flower-emoji {
+            font-size: clamp(1.5rem, 4vmin, 3rem); opacity: 0;
+            animation: bloom-and-fade 5s ease-in-out forwards;
+        }
+        @keyframes bloom-and-fade {
+            0% { transform: scale(0); opacity: 0; }
+            20% { transform: scale(1.2); opacity: 0.9; }
+            80% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(0.5); opacity: 0; }
+        }
+        
+        .puzzle-piece-svg { width: 100%; height: 100%; }
+        .svg-overlay { 
+            position: absolute; pointer-events: auto; z-index: 5; 
+        }
+        
+        .dimmed-piece {
+            filter: brightness(0.7) saturate(0.8); cursor: default !important; animation: none !important; z-index: 4; 
+        }
+
+        #tryAgainMessage { 
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; z-index: 25; 
+        }
+        #progressBarFill { transition: width 0.5s ease-in-out; }
+        #babyIcon { transition: left 0.5s ease-in-out; }
+
+        img.slide {
+            width: 100%; height: 100%; object-fit: contain;
+            transition: transform 1.5s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.7s ease-in-out, filter 0.5s ease-in-out; 
+        }
+        img.slide.pan-zoom-active { /* Pan-zoom to letterboard on shelf image */
+            transform-origin: 38% 25%; 
+            transform: scale(3.0); /* Adjusted zoom for pan */
+        }
+        img.slide.slide-fullscreen { /* Final settle zoom to fill page */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 90 !important; 
+            object-fit: cover !important; 
+            border-radius: 0 !important;
+            transform: scale(1.1); /* Gentle overall zoom to fill */
+            transition: width 0.8s ease-out, height 0.8s ease-out, top 0.8s ease-out, left 0.8s ease-out, opacity 0.5s ease-out, transform 0.8s ease-out, filter 0.5s ease-in-out !important;
+        }
+         img.slide.slide-fullscreen.dimmed-for-prompt {
+            filter: brightness(0.5);
+        }
+
+
+        img.slide.active { opacity: 1; }
+        img.slide:not(.active) { opacity: 0; position: absolute; top:0; left:0; width:100%; height:100%; }
+
+        #puzzleArea {
+            position: relative; aspect-ratio: 1 / 1; margin: auto;
+            /* New dynamic background for puzzle area */
+            background: linear-gradient(120deg, #fde68a, #fbcfe8, #a5f3fc, #fde68a); /* Playful pastel gradient */
+            background-size: 400% 400%;
+            animation: puzzle-bg-animation 15s ease infinite;
+            border-radius: 0.75rem; /* Keep rounded corners */
+        }
+        @keyframes puzzle-bg-animation {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+        #puzzleImage { 
+            display: none; /* Hide the original shelf image during puzzle phase */
+        }
+
+        h1, h2, h3, p, li, button {
+            font-size: clamp(0.8rem, 2.5vmin, 1.5rem);
+        }
+        h1 { font-size: clamp(1.5rem, 5vmin, 3rem); }
+        h2 { font-size: clamp(1.2rem, 4vmin, 2.5rem); }
+        #introScreen h1 {font-size: clamp(1.8rem, 6vmin, 3.5rem);}
+        #introScreen h2.animated-heading-gradient {font-size: clamp(2rem, 7vmin, 4rem);} 
+
+        button {
+            padding: clamp(0.5rem, 2vmin, 1rem) clamp(1rem, 3vmin, 2rem);
+            font-size: clamp(0.9rem, 2.5vmin, 1.2rem);
+        }
+        #startPuzzleButton { 
+            font-size: clamp(1rem, 3vmin, 1.5rem); 
+            background-image: linear-gradient(to right, #d1d5db, #9ca3af, #d1d5db);
+            background-size: 200% auto;
+            animation: button-gradient-animation 3s ease infinite alternate;
+        }
+        #startPuzzleButton:hover {
+             background-position: right center; 
+        }
+
+
+        #walkthroughList li {
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        #walkthroughList li.active-step-pulse {
+            animation: pulse-bg-neutral 1.5s infinite alternate;
+            box-shadow: 0 0 15px rgba(150, 150, 150, 0.7); 
+        }
+        @keyframes pulse-bg-neutral {
+            0% { background-color: #f3f4f6; transform: scale(1); } 
+            100% { background-color: #e5e7eb; transform: scale(1.03); } 
+        }
+        #walkthroughList li.completed-step-anim::after {
+            content: '✔'; color: green; font-size: 1.2em; margin-left: 8px;
+            display: inline-block; animation: checkmark-pop 0.5s ease-out;
+        }
+        @keyframes checkmark-pop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .slideshow-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem; 
+            margin-bottom: 0.75rem; 
+            position: relative; 
+            z-index: 110; 
+        }
+        .slideshow-nav-button {
+            background-color: #9CA3AF; 
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem; 
+            border-radius: 0.75rem; 
+            cursor: pointer;
+            font-size: 1.25rem; 
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .slideshow-nav-button:hover:not(:disabled) {
+            background-color: #6B7280; 
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+         .slideshow-nav-button:active:not(:disabled) {
+            transform: translateY(0px) scale(1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .slideshow-nav-button:disabled {
+            background-color: #D1D5DB; 
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #slideshowScreen .slideshow-main-content { 
+            background-color: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(5px); 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); 
+            border-radius: 0.75rem; 
+            padding: clamp(0.75rem, 2vw, 1.5rem); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.75rem, 2vw, 1rem); 
+            overflow-y: auto;
+            max-height: 60vh; 
+            width: 100%; 
+            max-width: 80vw; 
+            transition: max-width 0.7s cubic-bezier(0.25, 0.1, 0.25, 1), max-height 0.7s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-out;
+        }
+        #slideshowScreen .slideshow-main-content.slideshow-image-expanded {
+            max-width: 95vw; 
+            max-height: 90vh; 
+        }
+         #slideshowScreen .slideshow-main-content.hidden-for-fullscreen {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+
+        #slideshowContent {
+            padding: 5px; 
+            border: 3px solid transparent;
+            background-clip: padding-box; 
+            position: relative;
+            width: 100%; 
+        }
+        #slideshowContent::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            margin: -3px; 
+            border-radius: inherit; 
+            background: linear-gradient(120deg, #FFD700, #C0C0C0, #FFA500, #a7f3d0, #FFD700); 
+            background-size: 300% 300%;
+            animation: frame-gradient-animation 8s ease-in-out infinite;
+        }
+        @keyframes frame-gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+       
+        .thank-you-emojis span {
+            display: inline-block;
+            animation: sparkle-emoji 1.5s infinite;
+            font-size: 1.3em; 
+            margin: 0 0.1em;
+        }
+        .thank-you-emojis span:nth-child(2) { animation-delay: 0.2s; }
+        .thank-you-emojis span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes sparkle-emoji {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+        }
+        #finalSlideMessage {
+            position: fixed; 
+            bottom: clamp(1rem, 4vh, 2.5rem); 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 120; 
+            width: auto; 
+            max-width: 90%; 
+            padding: clamp(0.5rem, 2vw, 1rem);
+            background-color: rgba(255, 192, 203, 0.85); 
+            border-radius: 1rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+        #finalSlideMessage.hidden { 
+            display: none !important;
+        }
+        #rotateDeviceModal {
+            background-color: rgba(0,0,0,0.85); /* Darker for more focus */
+            color: white;
+            text-align: center;
+            z-index: 1000; /* Ensure it's on top of everything initially */
+        }
+        #rotateDeviceModal svg {
+            width: 60px; /* Slightly smaller for mobile */
+            height: 60px;
+            margin: 1rem auto;
+            animation: rotate-phone-anim 2s ease-in-out infinite;
+        }
+        @keyframes rotate-phone-anim {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="bokehBackground"></div> 
+    <div id="gameWrapper">
+        <div id="rotateDeviceModal" class="game-screen-visibility flex-col items-center justify-center p-6 rounded-lg">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="text-white">
+                <path d="M16.668 2.001H7.332c-1.615 0-2.931 1.316-2.931 2.931V19.07c0 1.615 1.316 2.931 2.931 2.931h9.336c1.615 0 2.931-1.316 2.931-2.931V4.932c0-1.615-1.316-2.931-2.931-2.931zm-9.336 1.069h9.336c.921 0 1.862.941 1.862 1.862V19.07c0 .921-.941 1.862-1.862 1.862H7.332c-.921 0-1.862-.941-1.862-1.862V4.932c0-.921.941-1.862 1.862-1.862zM12 17.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5z"/>
+            </svg>
+            <p class="text-xl font-semibold mb-2">Rotate for Best View!</p>
+            <p class="mb-4 text-gray-200">Please rotate your device to landscape mode for the optimal experience.</p>
+            <button id="continueFromRotatePrompt" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-lg">Got it!</button>
+        </div>
+
+        <div id="introScreen" class="game-screen-visibility">
+            <div class="bg-slate-100/80 backdrop-blur-md shadow-2xl rounded-2xl p-4 md:p-8 space-y-3 md:space-y-5 overflow-y-auto max-h-[90vh] max-w-[90vw] md:max-w-2xl">
+                <h1 class="font-fredoka text-slate-700 animated-heading-gradient">Theo Santos & Alisha Shakya-Santos'</h1> <h2 class="font-chewy animated-heading-gradient">Ultimate Baby Reveal!</h2> <p class="font-inter text-slate-600">
+                    We're so excited to share our special news with you! Get ready to solve a little puzzle to find out...
+                </p>
+                <div class="bg-gray-200/70 p-3 md:p-5 rounded-xl shadow-inner space-y-2 md:space-y-3">
+                    <h3 class="font-fredoka animated-heading-gradient">How to Play:</h3> <ul class="list-none space-y-2 text-left max-w-md mx-auto font-inter text-slate-700">
+                        <li class="flex items-center space-x-2"><span class="text-xl md:text-2xl bobbing-icon">💖</span><span>Click the highlighted puzzle pieces in order.</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-xl md:text-2xl bobbing-icon">🌟</span><span>Each click reveals a part of our big secret!</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-xl md:text-2xl bobbing-icon">🎉</span><span>Follow the clues in the Walkthrough Menu.</span></li>
+                        <li class="flex items-center space-x-2"><span class="text-xl md:text-2xl bobbing-icon">🎁</span><span>Reach the end for the grand reveal & a special slideshow!</span></li>
+                    </ul>
+                </div>
+                <button id="startPuzzleButton" class="mt-4 md:mt-6 text-white font-bold rounded-xl shadow-lg transform transition-transform hover:scale-105 pulse-button font-fredoka">
+                    Let's Solve It!
+                </button>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="game-screen-visibility no-direct-bg flex-col md:flex-row items-stretch justify-center p-1 md:p-2 space-y-2 md:space-y-0 md:space-x-2">
+            <div id="puzzleContainer" class="flex-grow flex items-center justify-center relative w-full md:w-2/3 h-1/2 md:h-full p-1">
+                 <div id="puzzleArea" class="w-full h-full max-w-[95vmin] max-h-[95vmin] md:max-w-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)]">
+                    <div id="puzzlePiece1" data-piece-id="1" class="svg-overlay puzzle-piece-idle" style="top: 5%; left: 31%; width: 56%; height: 40%;">
+                        <svg viewBox="0 0 100 100" class="puzzle-piece-svg"> <circle cx="50" cy="50" r="48" /> <text x="50" y="55" font-size="24" class="font-chewy fill-slate-700">🗣️<tspan class="animated-qmark">?</tspan></text> 
+                        </svg>
+                    </div>
+                    <div id="puzzlePiece2" data-piece-id="2" class="svg-overlay puzzle-piece-idle" style="top: 57%; left: 58%; width: 42%; height: 32%;">
+                        <svg viewBox="0 0 100 100" class="puzzle-piece-svg"> <circle cx="50" cy="50" r="48" />
+                            <text x="50" y="55" font-size="24" class="font-chewy fill-slate-700">👣<tspan class="animated-qmark">?</tspan></text>
+                        </svg>
+                    </div>
+                    <div id="puzzlePiece3" data-piece-id="3" class="svg-overlay puzzle-piece-idle" style="top: 49%; left: 7%; width: 38%; height: 38%;">
+                         <svg viewBox="0 0 100 100" class="puzzle-piece-svg"> <circle cx="50" cy="50" r="48" />
+                            <text x="50" y="55" font-size="24" class="font-chewy fill-slate-700">🕯️<tspan class="animated-qmark">?</tspan></text> 
+                        </svg>
+                    </div>
+                </div>
+                <div id="wordRevealArea" class="absolute inset-0 flex items-center justify-center pointer-events-none"> </div>
+                <div id="pregnancyHintArea" class="absolute inset-0 pointer-events-none"> </div>
+                <div id="tryAgainMessage" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-red-500 text-white px-3 py-1 rounded-md shadow-md text-xs opacity-0 transform scale-90">
+                    Oops! Try the highlighted piece.
+                </div>
+            </div>
+            <div id="walkthroughContainer" class="w-full md:w-1/3 h-auto md:h-[calc(100%-1rem)] flex flex-col items-center justify-center p-1 md:p-2">
+                <div class="bg-slate-200/80 backdrop-blur-sm rounded-xl shadow-lg space-y-1 md:space-y-2 p-2 md:p-3 w-full max-w-md md:max-w-full max-h-[90%] md:max-h-[calc(100%-0.5rem)] overflow-y-auto">
+                    <h3 class="text-lg md:text-xl font-fredoka text-slate-700 text-center animated-heading-gradient">Walkthrough</h3> <ul id="walkthroughList" class="space-y-1 md:space-y-2 font-inter text-slate-700 text-sm md:text-base">
+                        <li data-step="0" class="p-2 rounded-lg bg-gray-300 border-2 border-gray-500 shadow">
+                            <span class="font-semibold">1. The Announcement</span> (🗣️) </li>
+                        <li data-step="1" class="p-2 rounded-lg bg-slate-100 opacity-60">
+                            <span class="font-semibold">2. Spot the Tiny Footwear</span> (👣)
+                        </li>
+                        <li data-step="2" class="p-2 rounded-lg bg-slate-100 opacity-60">
+                            <span class="font-semibold">3. A Sweet Celebration</span> (🕯️) </li>
+                    </ul>
+                    <div class="mt-2 md:mt-3">
+                        <h4 class="text-xs md:text-sm font-semibold text-slate-700 mb-1">Progress:</h4>
+                        <div class="w-full bg-slate-300 rounded-full h-4 md:h-5 shadow-inner relative">
+                            <div id="progressBarFill" class="bg-gradient-to-r from-yellow-400 to-orange-400 h-full rounded-full text-xs font-medium text-white text-center p-0.5 leading-none" style="width: 0%;"></div>
+                            <span id="babyIcon" class="absolute top-1/2 -translate-y-1/2 text-md md:text-lg" style="left: 0%; transform: translateX(-50%) translateY(-50%);">👶</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="revealScreen" class="game-screen-visibility"> 
+            <div class="bg-transparent backdrop-filter-none p-4 md:p-8 space-y-1 md:space-y-2 overflow-visible max-h-full max-w-full text-center relative w-full h-full">
+                <div id="celebrationEffectsContainer" class="absolute inset-0 pointer-events-none overflow-hidden"> </div>
+                <div class="relative z-10 flex flex-col items-center justify-center h-full"> 
+                    <div id="revealTextContainer" class="flex flex-col items-center justify-center mt-8"> <h2 id="revealText1" class="reveal-text-item font-bangers">IT'S A BOY!</h2> 
+                        <p id="revealText2" class="reveal-text-item">Leander Ratna H Santos 💙</p> 
+                        <p id="revealText3" class="reveal-text-item font-fredoka text-slate-100">Our little Boy!</p> 
+                    </div>
+                    <button id="startSlideshowButton" class="mt-6 md:mt-8 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 hover:from-yellow-500 hover:via-orange-600 hover:to-red-600 text-white font-bold rounded-xl shadow-lg transform transition-transform hover:scale-105 font-fredoka animated-gradient-button">
+                        See Our Journey!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slideshowScreen" class="game-screen-visibility">
+            <div class="slideshow-main-content"> <h2 class="text-2xl md:text-3xl font-fredoka text-slate-700 text-center animated-heading-gradient">Our Pregnancy Journey</h2> 
+                <div id="slideshowContent" class="relative w-full aspect-video bg-slate-100 rounded-xl shadow-lg overflow-hidden mx-auto">
+                    <div id="finalSlideAnimationOverlay" class="final-slide-animations absolute inset-0 pointer-events-none overflow-hidden z-10">
+                        </div>
+                </div>
+                <div id="slideshowCaption" class="font-inter text-slate-600 text-base md:text-lg min-h-[2em] md:min-h-[2.5em] text-center mt-2">
+                    </div>
+                <div id="finalSlideMessage" class="hidden mt-3 md:mt-4 p-3 bg-pink-100/70 rounded-xl text-center">
+                    <div class="slideshow-nav-container mb-3">
+                         <button id="prevSlideButton" class="slideshow-nav-button"><span>&#x2B05;&#xFE0F;</span> Prev</button>
+                         <p class="text-lg md:text-xl font-pacifico text-pink-600 mx-2 thank-you-emojis">
+                            Thank you! <span>💖</span><span>✨</span><span>🌸</span>
+                        </p>
+                         <button id="nextSlideButton" class="slideshow-nav-button">Next <span>&#x27A1;&#xFE0F;</span></button>
+                    </div>
+                    <button id="playAgainButton" class="mt-3 bg-gradient-to-r from-green-400 to-teal-500 hover:from-green-500 hover:to-teal-600 text-white font-bold rounded-xl shadow-lg transform transition-transform hover:scale-105 font-fredoka">
+                        Play Game Again?
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // IIFE with a global flag to prevent multiple initializations
+    if (typeof window.babyRevealGameInitialized === 'undefined') {
+        window.babyRevealGameInitialized = true;
+        console.log("Initializing Baby Reveal Game script (v2 - Full Dynamic Polish)...");
+
+        (function() { // Start of IIFE content
+            // Game Configuration
+            const puzzlePiecesData = [
+                { id: 1, elementId: 'puzzlePiece1', wordKey: "word1", hintEmoji: '🗣️', nextStep: 0, fill: '#a7f3d0', solvedFill: '#4ade80' }, 
+                { id: 2, elementId: 'puzzlePiece2', wordKey: "word2", hintEmoji: '👣', nextStep: 1, fill: '#fed7aa', solvedFill: '#fb923c' }, 
+                { id: 3, elementId: 'puzzlePiece3', wordKey: "word3", hintEmoji: '🕯️', nextStep: 2, fill: '#fecaca', solvedFill: '#f87171' }  
+            ];
+            const revealWords = { 
+                word1: "IT'S", 
+                word2: "A", 
+                word3: "?" // Final suspense
+            };
+            const babyNameFull = "Leander Ratna H Santos 💙";
+            const finalRevealMessageText = "IT'S A BOY!"; 
+            const finalRevealSubMessageText = "Our little Boy!"; 
+            const imageUrlPuzzleBackground = "https://i.imgur.com/EWm3Cjd.jpeg"; 
+
+            const slideshowData = [
+                { image: "https://i.imgur.com/ZaJNf0V.jpeg", caption: "16 Weeks! Our little avocado is growing! 🥑" },
+                { image: "https://i.imgur.com/sDtK9qV.jpeg", caption: "Feeling those first flutters! Such a magical time. ✨" }
+            ];
+            let allSlidesData = [...slideshowData, {image: imageUrlPuzzleBackground, caption: "Our Big News!"}];
+
+
+            // DOM Elements
+            const gameWrapper = document.getElementById('gameWrapper'); 
+            const rotateDeviceModal = document.getElementById('rotateDeviceModal');
+            const continueFromRotatePrompt = document.getElementById('continueFromRotatePrompt');
+            const introScreen = document.getElementById('introScreen');
+            const gameScreen = document.getElementById('gameScreen');
+            const revealScreen = document.getElementById('revealScreen');
+            const slideshowScreen = document.getElementById('slideshowScreen');
+            const slideshowMainContent = slideshowScreen.querySelector('.slideshow-main-content');
+
+            const startPuzzleButton = document.getElementById('startPuzzleButton');
+            const puzzleArea = document.getElementById('puzzleArea');
+            const wordRevealArea = document.getElementById('wordRevealArea');
+            const pregnancyHintArea = document.getElementById('pregnancyHintArea');
+            const tryAgainMessage = document.getElementById('tryAgainMessage');
+            const walkthroughList = document.getElementById('walkthroughList');
+            const progressBarFill = document.getElementById('progressBarFill');
+            const babyIcon = document.getElementById('babyIcon');
+            const celebrationEffectsContainer = document.getElementById('celebrationEffectsContainer');
+            const revealTextContainer = document.getElementById('revealTextContainer'); 
+            const revealText1 = document.getElementById('revealText1');
+            const revealText2 = document.getElementById('revealText2');
+            const revealText3 = document.getElementById('revealText3');
+            const startSlideshowButton = document.getElementById('startSlideshowButton');
+            const slideshowContent = document.getElementById('slideshowContent');
+            const slideshowCaption = document.getElementById('slideshowCaption');
+            const finalSlideMessage = document.getElementById('finalSlideMessage');
+            const playAgainButton = document.getElementById('playAgainButton');
+            const bokehBackground = document.getElementById('bokehBackground'); 
+            const prevSlideButton = document.getElementById('prevSlideButton');
+            const nextSlideButton = document.getElementById('nextSlideButton');
+
+
+            let currentStep = 0;
+            let soundsEnabled = false;
+            let synths = {};
+            let finalAnimationInterval;
+            let revealScreenTimeout;
+            let slideshowManualNavIndex = 0; 
+            let slideExpansionTimeout;
+            let finalSlidePanZoomTimeout; 
+            let pianoLoop;
+
+
+            function switchScreen(activeScreenId) {
+                [rotateDeviceModal, introScreen, gameScreen, revealScreen, slideshowScreen].forEach(screen => {
+                   if(screen) screen.classList.toggle('active', screen.id === activeScreenId);
+                });
+                 if (activeScreenId === 'slideshowScreen') {
+                    startPianoLoop();
+                } else {
+                    stopPianoLoop();
+                }
+            }
+
+            function initSounds() {
+                if (Tone.context.state !== 'running') Tone.start();
+                synths.correctPiece = new Tone.PluckSynth({ volume: -10 }).toDestination();
+                synths.wordReveal = new Tone.Synth({ oscillator: { type: 'triangle8' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 }, volume: -8 }).toDestination();
+                synths.incorrect = new Tone.Synth({ oscillator: { type: 'square' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }, volume: -15 }).toDestination();
+                synths.pregnancyHint = new Tone.MembraneSynth({ pitchDecay: 0.008, octaves: 2, envelope: { attack: 0.001, decay: 0.2, sustain: 0 }, volume: -18 }).toDestination();
+                synths.fanfare = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "pwm", modulationFrequency: 0.2 }, envelope: { attack: 0.02, decay: 0.3, sustain: 0.2, release: 0.3 }, volume: -10 }).toDestination();
+                synths.slideshowNext = new Tone.PluckSynth({ volume: -16, attackNoise: 0.5, dampening: 6000 }).toDestination();
+                synths.pianoEnding = new Tone.PolySynth(Tone.FMSynth, { 
+                    harmonicity: 3.01, modulationIndex: 14,
+                    envelope: { attack: 0.01, decay: 2, sustain: 0.1, release: 1 },
+                    modulationEnvelope: { attack: 0.01, decay: 0.5, sustain: 0.1, release: 1 },
+                    volume: -8
+                }).toDestination();
+                 synths.revealPiano = new Tone.PolySynth(Tone.Synth, { 
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.05, decay: 1.5, sustain: 0.3, release: 1 },
+                    volume: -6
+                }).toDestination();
+                synths.slideshowPiano = new Tone.FMSynth({
+                    harmonicity: 2,
+                    modulationIndex: 10,
+                    detune: 0,
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.01, decay: 0.5, sustain: 0.1, release: 0.8 },
+                    modulation: { type: "square" },
+                    modulationEnvelope: { attack: 0.02, decay: 0.3, sustain: 0, release: 0.8 },
+                    volume: -18 
+                }).toDestination();
+                soundsEnabled = true;
+            }
+
+            function startPianoLoop() {
+                if(!soundsEnabled) initSounds(); // Ensure sounds are ready
+                if (pianoLoop) pianoLoop.stop(0).dispose(); 
+                
+                const notes = ["C4", "E4", "G4", "B4", "A4", "F4", "D4", "G3"];
+                let noteIndex = 0;
+
+                pianoLoop = new Tone.Loop(time => {
+                    if(synths.slideshowPiano) synths.slideshowPiano.triggerAttackRelease(notes[noteIndex % notes.length], "2n", time);
+                    noteIndex++;
+                }, "1n").start(0); 
+                Tone.Transport.start();
+            }
+
+            function stopPianoLoop() {
+                if (pianoLoop) {
+                    pianoLoop.stop(0).dispose();
+                    pianoLoop = null;
+                }
+                // Consider stopping Tone.Transport only if no other loops are running
+                // For now, let's assume this is the only continuous transport user.
+                // If other loops use it, this might need adjustment.
+                // Tone.Transport.stop(); 
+            }
+            
+            function playSound(type, note = null, duration = null, time = null) {
+                if (!soundsEnabled || !synths[type]) return; 
+                try {
+                    if (type === 'fanfare') {
+                        const now = Tone.now();
+                        synths.fanfare.triggerAttackRelease(["C4", "E4", "G4"], "8n", now);
+                        synths.fanfare.triggerAttackRelease(["G4", "C5", "E5"], "8n", now + 0.3);
+                        synths.fanfare.triggerAttackRelease(["E5", "G5", "C6"], "4n", now + 0.6);
+                    } else if (type === 'pianoEnding') { 
+                        const now = Tone.now();
+                        synths.pianoEnding.triggerAttackRelease("C4", "2n", now);
+                        synths.pianoEnding.triggerAttackRelease("E4", "2n", now + 0.3);
+                        synths.pianoEnding.triggerAttackRelease("G4", "2n", now + 0.6);
+                        synths.pianoEnding.triggerAttackRelease("C5", "1n", now + 1.0); 
+                    } else if (type === 'revealPiano') { 
+                         const now = Tone.now();
+                        synths.revealPiano.triggerAttackRelease(["C3", "G3", "C4", "E4"], "1n", now);
+                        synths.revealPiano.triggerAttackRelease(["F3", "C4", "F4", "A4"], "1n", now + 1.5);
+                        synths.revealPiano.triggerAttackRelease(["G3", "D4", "G4", "B4"], "1n", now + 3.0);
+                        synths.revealPiano.triggerAttackRelease(["C4", "E4", "G4", "C5"], "0.5n", now + 4.5); 
+                    }
+                    else if (note && duration) { 
+                        synths[type].triggerAttackRelease(note, duration, time || Tone.now());
+                    } else if (note) { 
+                         synths[type].triggerAttackRelease(note, time || Tone.now());
+                    }
+                } catch (e) { console.error("Error playing sound:", type, e); }
+            }
+
+            function createBokehEffect() {
+                const numCircles = 25; 
+                const colors = [
+                    'rgba(200, 200, 220, 0.15)', 
+                    'rgba(220, 220, 220, 0.2)',  
+                    'rgba(180, 180, 200, 0.1)', 
+                    'rgba(240, 240, 240, 0.15)'  
+                ];
+                bokehBackground.innerHTML = ''; 
+                for (let i = 0; i < numCircles; i++) {
+                    const circle = document.createElement('div');
+                    circle.classList.add('bokeh-circle');
+                    const size = Math.random() * 120 + 60; 
+                    circle.style.width = `${size}px`;
+                    circle.style.height = `${size}px`;
+                    circle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    circle.style.left = `${Math.random() * 100 - 10}%`; 
+                    circle.style.top = `${Math.random() * 100 - 10}%`;
+                    circle.style.animationDelay = `${Math.random() * 15}s`; 
+                    circle.style.animationDuration = `${Math.random() * 10 + 15}s`; 
+                    bokehBackground.appendChild(circle);
+                }
+            }
+
+
+            function initializeGame() {
+                if (startPuzzleButton) {
+                    startPuzzleButton.addEventListener('click', () => {
+                        console.log("Start button clicked!"); 
+                        if (!soundsEnabled) initSounds(); 
+                        switchScreen('gameScreen');
+                        updateWalkthroughHighlight(); 
+                    });
+                    console.log("Start button listener attached."); 
+                } else {
+                    console.error("Start Puzzle Button not found!");
+                }
+
+                puzzlePiecesData.forEach(pieceData => {
+                    const pieceElement = document.getElementById(pieceData.elementId);
+                    if (pieceElement) {
+                        const svgShape = pieceElement.querySelector('svg circle'); 
+                        if (svgShape) svgShape.setAttribute('fill', pieceData.fill);
+                        pieceElement.addEventListener('click', () => handlePieceClick(pieceData, pieceElement));
+                    } else {
+                        console.error("Puzzle piece element not found:", pieceData.elementId);
+                    }
+                });
+                
+                if (startSlideshowButton) {
+                    startSlideshowButton.addEventListener('click', () => {
+                        if(revealScreenTimeout) clearTimeout(revealScreenTimeout); 
+                        switchScreen('slideshowScreen');
+                        startSlideshow();
+                    });
+                }
+
+                if (prevSlideButton) {
+                    prevSlideButton.addEventListener('click', () => {
+                        clearInterval(slideshowInterval); 
+                        if(finalAnimationInterval) clearInterval(finalAnimationInterval);
+                        if (slideExpansionTimeout) clearTimeout(slideExpansionTimeout);
+                        if (finalSlidePanZoomTimeout) clearTimeout(finalSlidePanZoomTimeout);
+                        const currentOverlay = document.getElementById('finalSlideAnimationOverlay');
+                        if(currentOverlay) currentOverlay.innerHTML = '';
+                        const currentSlideImage = document.getElementById('currentSlideImage');
+                        if(currentSlideImage) currentSlideImage.classList.remove('pan-zoom-active', 'slide-fullscreen', 'dimmed-for-prompt');
+                        slideshowMainContent.classList.remove('hidden-for-fullscreen');
+
+
+                        if (displayedSlideIndex > 0) {
+                            displayedSlideIndex--;
+                            displaySlideByIndex(displayedSlideIndex, false); 
+                        }
+                        updateSlideshowNavButtons();
+                    });
+                }
+
+                if (nextSlideButton) {
+                    nextSlideButton.addEventListener('click', () => {
+                        clearInterval(slideshowInterval);
+                        if(finalAnimationInterval) clearInterval(finalAnimationInterval);
+                        if (slideExpansionTimeout) clearTimeout(slideExpansionTimeout);
+                        if (finalSlidePanZoomTimeout) clearTimeout(finalSlidePanZoomTimeout);
+                        const currentOverlay = document.getElementById('finalSlideAnimationOverlay');
+                        if(currentOverlay) currentOverlay.innerHTML = '';
+                        const currentSlideImage = document.getElementById('currentSlideImage');
+                        if(currentSlideImage) currentSlideImage.classList.remove('pan-zoom-active', 'slide-fullscreen', 'dimmed-for-prompt');
+                        slideshowMainContent.classList.remove('hidden-for-fullscreen');
+
+
+                        if (displayedSlideIndex < allSlidesData.length - 1) {
+                            displayedSlideIndex++;
+                            displaySlideByIndex(displayedSlideIndex, false); 
+                        }
+                        if (displayedSlideIndex === allSlidesData.length - 1) { 
+                             startFinalAnimations(document.getElementById('finalSlideAnimationOverlay')); 
+                             if (slideshowMainContent) slideshowMainContent.classList.add('slideshow-image-expanded'); 
+                             if(currentSlideImage) { 
+                                setTimeout(() => currentSlideImage.classList.add('pan-zoom-active'), 50); 
+                             }
+                        }
+                        updateSlideshowNavButtons();
+                    });
+                }
+
+                if(playAgainButton) {
+                     playAgainButton.addEventListener('click', () => {
+                        currentStep = 0; 
+                        switchScreen('introScreen'); 
+                        stopPianoLoop(); 
+                        if(finalAnimationInterval) clearInterval(finalAnimationInterval); 
+                        if(revealScreenTimeout) clearTimeout(revealScreenTimeout);
+                        if (slideExpansionTimeout) clearTimeout(slideExpansionTimeout);
+                        if (slideshowMainContent) {
+                            slideshowMainContent.classList.remove('slideshow-image-expanded', 'hidden-for-fullscreen');
+                        }
+                        if (finalSlidePanZoomTimeout) clearTimeout(finalSlidePanZoomTimeout);
+                        const finalImage = document.getElementById('currentSlideImage');
+                        if(finalImage) finalImage.classList.remove('pan-zoom-active', 'slide-fullscreen', 'dimmed-for-prompt');
+                        
+                        const currentAnimationOverlay = document.getElementById('finalSlideAnimationOverlay'); 
+                        if(currentAnimationOverlay) currentAnimationOverlay.innerHTML = ''; 
+
+                        puzzlePiecesData.forEach(pData => {
+                            const pieceEl = document.getElementById(pData.elementId);
+                            if (pieceEl) {
+                                pieceEl.classList.remove('dimmed-piece');
+                                const svgShape = pieceEl.querySelector('svg circle'); 
+                                 if (svgShape) svgShape.setAttribute('fill', pData.fill);
+                            }
+                        });
+                        wordRevealArea.innerHTML = ''; 
+                        pregnancyHintArea.innerHTML = ''; 
+                        updateWalkthroughHighlight(); 
+                        updateProgressBar(); 
+                        clearInterval(slideshowInterval); 
+                        finalSlideMessage.classList.add('hidden'); 
+                    });
+                }
+
+                if (continueFromRotatePrompt) {
+                    continueFromRotatePrompt.addEventListener('click', () => {
+                        switchScreen('introScreen');
+                    });
+                }
+            }
+
+
+            function handlePieceClick(pieceData, pieceElement) {
+                if (pieceElement.classList.contains('dimmed-piece')) return; 
+                if (pieceData.nextStep === currentStep) { 
+                    playSound('correctPiece', 'C5');
+                    const svgShape = pieceElement.querySelector('svg circle'); 
+                    if (svgShape) svgShape.setAttribute('fill', pieceData.solvedFill);
+                    pieceElement.classList.add('dimmed-piece'); 
+
+                    const wordDiv = document.createElement('div');
+                    wordDiv.textContent = revealWords[pieceData.wordKey]; 
+                    wordDiv.className = 'word-popup font-bangers text-6xl sm:text-7xl md:text-8xl text-white';
+                    wordRevealArea.innerHTML = ''; 
+                    wordRevealArea.appendChild(wordDiv);
+                    playSound('wordReveal', 'E5', '4n');
+
+                    const hintDiv = document.createElement('div');
+                    hintDiv.textContent = pieceData.hintEmoji; 
+                    hintDiv.className = 'pregnancy-hint-anim';
+                    const pieceRect = pieceElement.getBoundingClientRect();
+                    const puzzleAreaRect = puzzleArea.getBoundingClientRect();
+                    hintDiv.style.left = `${pieceRect.left - puzzleAreaRect.left + pieceRect.width / 2 - 16}px`; 
+                    hintDiv.style.top = `${pieceRect.top - puzzleAreaRect.top + pieceRect.height / 2 - 16}px`; 
+                    pregnancyHintArea.appendChild(hintDiv);
+                    playSound('pregnancyHint', 'C4', '8n', Tone.now() + 0.1);
+                    setTimeout(() => hintDiv.remove(), 1000); 
+
+                    currentStep++; 
+                    updateWalkthroughHighlight();
+                    updateProgressBar();
+
+                    if (currentStep === puzzlePiecesData.length) {
+                        setTimeout(triggerGrandReveal, 1500); 
+                    }
+                } else { 
+                    playSound('incorrect', 'C3', '8n');
+                    tryAgainMessage.style.opacity = '1';
+                    tryAgainMessage.style.transform = 'scale(1) translateY(0)';
+                    setTimeout(() => { 
+                        tryAgainMessage.style.opacity = '0';
+                        tryAgainMessage.style.transform = 'scale(0.9) translateY(10px)';
+                    }, 2000);
+                }
+            }
+            
+            function updateWalkthroughHighlight() {
+                const steps = walkthroughList.querySelectorAll('li');
+                steps.forEach((li, index) => {
+                    li.classList.remove('active-step-pulse', 'completed-step-anim');
+                    li.classList.remove('bg-gray-300', 'border-gray-500', 'shadow'); 
+                    li.classList.add('opacity-60', 'bg-slate-100'); 
+                    if (index < currentStep) { 
+                        li.classList.add('line-through', 'opacity-50', 'bg-green-100', 'completed-step-anim');
+                    } else if (index === currentStep) { 
+                        li.classList.remove('opacity-60', 'bg-slate-100');
+                        li.classList.add('bg-gray-300', 'border-2', 'border-gray-500', 'shadow', 'active-step-pulse'); 
+                    }
+                });
+            }
+
+            function updateProgressBar() {
+                const progressPercentage = (currentStep / puzzlePiecesData.length) * 100;
+                progressBarFill.style.width = `${progressPercentage}%`;
+                babyIcon.style.left = `calc(${Math.min(progressPercentage, 98)}% - ${progressPercentage > 5 ? '10px' : '0px'})`; 
+            }
+
+            function triggerGrandReveal() {
+                playSound('revealPiano'); 
+                revealText1.textContent = finalRevealMessageText;
+                revealText2.textContent = babyNameFull;
+                revealText3.textContent = finalRevealSubMessageText;
+                
+                [revealText1, revealText2, revealText3].forEach(el => el.classList.remove('visible'));
+                revealScreen.classList.remove('background-image-enhanced'); 
+
+                switchScreen('revealScreen');
+                
+                setTimeout(() => revealText1.classList.add('visible'), 500); 
+                setTimeout(() => revealText2.classList.add('visible'), 1800); 
+                setTimeout(() => revealText3.classList.add('visible'), 3100); 
+
+                 setTimeout(() => { 
+                    revealScreen.classList.add('background-image-enhanced');
+                }, 4000); 
+
+                if(revealScreenTimeout) clearTimeout(revealScreenTimeout); 
+                revealScreenTimeout = setTimeout(() => {
+                    if (document.getElementById('revealScreen').classList.contains('active')) { 
+                         startSlideshowButton.click();
+                    }
+                }, 10000); 
+
+
+                celebrationEffectsContainer.classList.add('celebration-active'); 
+                createDynamicCelebrations(celebrationEffectsContainer); 
+                setTimeout(() => { 
+                    celebrationEffectsContainer.classList.remove('celebration-active');
+                    celebrationEffectsContainer.innerHTML = ''; 
+                }, 12000); 
+            }
+
+            function createDynamicCelebrations(container) { 
+                if (!container) return;
+                container.innerHTML = ''; 
+                const colors = ['pink', 'yellow', 'blue', 'purple', 'cyan', 'white']; 
+                const numConfetti = Math.min(250, Math.floor(window.innerWidth / 5)); 
+                for (let i = 0; i < numConfetti; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('effect-item', 'confetti');
+                    confetti.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.setProperty('--i', Math.random() * 100); 
+                    confetti.style.animationDelay = `${Math.random() * 0.3}s`; 
+                    confetti.style.animationDuration = `${Math.random() * 2.5 + 3}s`; 
+                    confetti.style.transform = `scale(${Math.random() * 0.9 + 0.7})`; 
+                    container.appendChild(confetti);
+
+                    if (i % 6 === 0) { 
+                        const starburst = document.createElement('div');
+                        starburst.classList.add('effect-item','starburst');
+                        starburst.style.left = `${Math.random() * 90 + 5}%`;
+                        starburst.style.top = `${Math.random() * 90 + 5}%`;
+                        starburst.style.transform = `rotate(${Math.random() * 360}deg)`;
+                        starburst.style.animationDelay = `${Math.random() * 0.8}s`;
+                        container.appendChild(starburst);
+                    }
+                     if (i % 10 === 0) { 
+                        const rBalloon = document.createElement('div');
+                        rBalloon.classList.add('effect-item', 'reveal-balloon');
+                        rBalloon.textContent = ['💙', '🎉', '✨', '🌟'][Math.floor(Math.random() * 4)];
+                        rBalloon.style.left = `${Math.random() * 70 + 15}%`;
+                        rBalloon.style.animationDelay = `${Math.random() * 2.5 + 0.5}s`;
+                        rBalloon.style.animationDuration = `${Math.random() * 3 + 4}s`; 
+                        container.appendChild(rBalloon);
+                    }
+                }
+            }
+            
+            let currentSlideIndex = 0; 
+            let displayedSlideIndex = 0; 
+            let slideshowInterval;
+            let slideshowContainerExpansionTimeout;
+            // finalSlidePanZoomTimeout is declared at the top of IIFE
+
+            function startSlideshow() {
+                currentSlideIndex = 0;
+                displayedSlideIndex = 0; 
+                finalSlideMessage.classList.add('hidden'); 
+                const currentOverlay = document.getElementById('finalSlideAnimationOverlay');
+                if(currentOverlay) currentOverlay.innerHTML = ''; 
+                if(finalAnimationInterval) clearInterval(finalAnimationInterval); 
+                updateSlideshowNavButtons();
+                displaySlideByIndex(displayedSlideIndex, true); 
+                
+                slideshowInterval = setInterval(() => {
+                    currentSlideIndex++;
+                    if (currentSlideIndex < slideshowData.length) { 
+                        displayedSlideIndex = currentSlideIndex;
+                        displaySlideByIndex(displayedSlideIndex, true);
+                    } else { 
+                        showFinalSlideshowMessage();
+                    }
+                }, 5000 + 700 + 2500 + 2000); 
+            }
+
+            function displaySlideByIndex(index, isNewSlide = false) {
+                playSound('slideshowNext', 'G4', '16n', Tone.now() + 0.1);
+                const slide = allSlidesData[index]; 
+                slideshowContent.innerHTML = `<img src="${slide.image}" alt="Journey photo ${index + 1}" class="slide active" id="currentSlideImage"> <div id="finalSlideAnimationOverlay" class="final-slide-animations absolute inset-0 pointer-events-none overflow-hidden z-10"></div>`;
+                slideshowCaption.textContent = slide.caption;
+                
+                const currentSlideImage = document.getElementById('currentSlideImage');
+                if(currentSlideImage) {
+                    currentSlideImage.classList.remove('pan-zoom-active', 'slide-fullscreen', 'dimmed-for-prompt');
+                }
+                slideshowMainContent.classList.remove('hidden-for-fullscreen');
+                document.querySelectorAll('#slideshowScreen h2, #slideshowCaption').forEach(el => el.style.opacity = '1');
+                if (index < allSlidesData.length - 1) { 
+                    finalSlideMessage.classList.add('hidden');
+                }
+                 finalSlideMessage.style.position = 'relative'; 
+                 finalSlideMessage.style.bottom = 'auto';
+                 finalSlideMessage.style.left = 'auto';
+                 finalSlideMessage.style.transform = 'none';
+
+
+                const currentAnimationOverlay = document.getElementById('finalSlideAnimationOverlay');
+                if(currentAnimationOverlay) currentAnimationOverlay.innerHTML = ''; 
+
+                if (slideshowMainContent) {
+                    slideshowMainContent.classList.remove('slideshow-image-expanded');
+                    if (slideExpansionTimeout) clearTimeout(slideExpansionTimeout);
+                    if (finalSlidePanZoomTimeout) clearTimeout(finalSlidePanZoomTimeout);
+
+                    if (isNewSlide) { 
+                        slideExpansionTimeout = setTimeout(() => {
+                            slideshowMainContent.classList.add('slideshow-image-expanded');
+                            if (index === allSlidesData.length - 1) { 
+                               finalSlidePanZoomTimeout = setTimeout(() => {
+                                    if(currentSlideImage) {
+                                        currentSlideImage.classList.add('pan-zoom-active');
+                                        setTimeout(() => {
+                                            if(currentSlideImage.classList.contains('pan-zoom-active')) { 
+                                                slideshowMainContent.classList.add('hidden-for-fullscreen');
+                                                document.querySelectorAll('#slideshowScreen h2, #slideshowCaption').forEach(el => el.style.opacity = '0');
+                                                currentSlideImage.classList.add('slide-fullscreen');
+                                                currentSlideImage.classList.add('dimmed-for-prompt'); 
+                                                finalSlideMessage.classList.remove('hidden'); 
+                                                finalSlideMessage.style.position = 'fixed';
+                                                finalSlideMessage.style.bottom = 'clamp(1rem, 5vh, 3rem)';
+                                                finalSlideMessage.style.left = '50%';
+                                                finalSlideMessage.style.transform = 'translateX(-50%)';
+                                                finalSlideMessage.style.zIndex = '120';
+                                                startFinalAnimations(document.getElementById('finalSlideAnimationOverlay')); 
+                                            }
+                                        }, 2000); 
+                                    }
+                               }, 500); 
+                            }
+                        }, 3000);
+                    } else { 
+                         slideshowMainContent.classList.add('slideshow-image-expanded');
+                         if (index === allSlidesData.length - 1 && currentSlideImage) { 
+                            currentSlideImage.classList.add('pan-zoom-active');
+                            setTimeout(() => {
+                                if(currentSlideImage.classList.contains('pan-zoom-active')) {
+                                    slideshowMainContent.classList.add('hidden-for-fullscreen');
+                                    document.querySelectorAll('#slideshowScreen h2, #slideshowCaption').forEach(el => el.style.opacity = '0');
+                                    currentSlideImage.classList.add('slide-fullscreen');
+                                    currentSlideImage.classList.add('dimmed-for-prompt');
+                                    finalSlideMessage.classList.remove('hidden');
+                                    finalSlideMessage.style.position = 'fixed';
+                                    finalSlideMessage.style.bottom = 'clamp(1rem, 5vh, 3rem)';
+                                    finalSlideMessage.style.left = '50%';
+                                    finalSlideMessage.style.transform = 'translateX(-50%)';
+                                    finalSlideMessage.style.zIndex = '120';
+                                    startFinalAnimations(document.getElementById('finalSlideAnimationOverlay'));
+                                }
+                            }, 2000); 
+                         }
+                    }
+                }
+            }
+            
+            function showFinalSlideshowMessage() {
+                clearInterval(slideshowInterval); 
+                if (slideExpansionTimeout) clearTimeout(slideExpansionTimeout);
+                if (finalSlidePanZoomTimeout) clearTimeout(finalSlidePanZoomTimeout);
+
+                displayedSlideIndex = allSlidesData.length -1; 
+                displaySlideByIndex(displayedSlideIndex, true); 
+                
+                updateSlideshowNavButtons();
+                playSound('pianoEnding'); 
+            }
+            
+            function updateSlideshowNavButtons() {
+                prevSlideButton.disabled = displayedSlideIndex === 0;
+                nextSlideButton.disabled = displayedSlideIndex === allSlidesData.length - 1;
+            }
+
+
+            function startFinalAnimations(container) {
+                if (!container) return;
+                container.innerHTML = ''; 
+
+                for (let i = 0; i < 7; i++) { 
+                    const balloon = document.createElement('div');
+                    balloon.classList.add('effect-item', 'balloon');
+                    balloon.textContent = ['🎈', '🎉', '🎊', '💙', '✨'][Math.floor(Math.random() * 5)];
+                    balloon.style.left = `${Math.random() * 80 + 10}%`; 
+                    balloon.style.animationDelay = `${Math.random() * 2.5}s`;
+                    balloon.style.animationDuration = `${Math.random() * 5 + 6}s`; 
+                    container.appendChild(balloon);
+                }
+
+                for (let i = 0; i < 10; i++) { 
+                    setTimeout(() => createFireworkBurst(container, ['#5e9fff', '#ff85c0', '#ffee58', '#ffffff', '#8a2be2']), Math.random() * 5000); 
+                }
+                
+                 for (let i = 0; i < 5; i++) { 
+                    const star = document.createElement('div');
+                    star.classList.add('effect-item', 'shooting-star'); 
+                    star.textContent = ['✨', '🌟', '💫'][Math.floor(Math.random() * 3)];
+                    star.style.setProperty('--sy', Math.random() * 80 + 10); 
+                    star.style.animationDelay = `${Math.random() * 3.5}s`;
+                    star.style.animationDuration = `${Math.random() * 4 + 5}s`; 
+                    container.appendChild(star);
+                }
+
+                for (let i = 0; i < 7; i++) { 
+                    const flower = document.createElement('div');
+                    flower.classList.add('effect-item', 'flower-emoji');
+                    flower.textContent = ['🌸', '🌼', '🌷', '💖'][Math.floor(Math.random()*4)];
+                    flower.style.left = `${Math.random() * 80 + 10}%`;
+                    flower.style.top = `${Math.random() * 70 + 15}%`; 
+                    flower.style.animationDelay = `${Math.random() * 4.5 + 1}s`; 
+                    container.appendChild(flower);
+                }
+                let animationCycle = 0;
+                if (finalAnimationInterval) clearInterval(finalAnimationInterval);
+                finalAnimationInterval = setInterval(() => { 
+                    if (animationCycle < 4) { 
+                        if (Math.random() > 0.4) createFireworkBurst(container, ['#5e9fff', '#ff85c0', '#ffee58', '#ffffff', '#8a2be2']);
+                        if (Math.random() > 0.6) { 
+                             const newElement = document.createElement('div');
+                             newElement.classList.add('effect-item');
+                             if(Math.random() > 0.5) {
+                                newElement.classList.add('balloon');
+                                newElement.textContent = ['🎈', '🎉', '🎊', '💙'][Math.floor(Math.random() * 4)];
+                                newElement.style.left = `${Math.random() * 80 + 10}%`;
+                                newElement.style.animationDelay = `0s`;
+                                newElement.style.animationDuration = `${Math.random() * 5 + 6}s`;
+                             } else {
+                                newElement.classList.add('flower-emoji');
+                                newElement.textContent = ['🌸', '🌼', '🌷','💖'][Math.floor(Math.random()*4)];
+                                newElement.style.left = `${Math.random() * 80 + 10}%`;
+                                newElement.style.top = `${Math.random() * 70 + 15}%`;
+                                newElement.style.animationDelay = `0s`;
+                             }
+                             container.appendChild(newElement);
+                        }
+                        animationCycle++;
+                    } else {
+                        clearInterval(finalAnimationInterval);
+                    }
+                }, 2500); 
+            }
+
+            function createFireworkBurst(container, colorsArray) {
+                if (!container) return;
+                const burstX = Math.random() * 70 + 15; 
+                const burstY = Math.random() * 50 + 10; 
+                const colors = colorsArray || ['#5e9fff', '#ff85c0', '#ffee58', '#ffffff'];
+                for (let i = 0; i < 25; i++) { 
+                    const particle = document.createElement('div');
+                    particle.classList.add('effect-item','firework-particle');
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.left = `${burstX}%`;
+                    particle.style.top = `${burstY}%`;
+                    const angle = Math.random() * 360;
+                    const distance = Math.random() * 50 + 15; 
+                    particle.style.transform = `rotate(${angle}deg) translateX(${distance}px) rotate(-${angle}deg) scale(0.5)`; 
+                    particle.style.animationDelay = `${Math.random() * 0.15}s`; 
+                    particle.style.animationDuration = `${Math.random() * 0.5 + 0.6}s`; 
+                    container.appendChild(particle);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                createBokehEffect(); 
+                initializeGame(); 
+                // Check for mobile portrait and show rotate prompt
+                if (window.matchMedia("(orientation: portrait)").matches && window.innerWidth < 768) {
+                    switchScreen('rotateDeviceModal');
+                } else {
+                    switchScreen('introScreen'); 
+                }
+                updateSlideshowNavButtons();
+            });
+
+        })(); // End of IIFE
+    } // End of global guard
+    </script>
+</body>
+</html>
