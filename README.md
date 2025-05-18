@@ -106,4 +106,4 @@ Please refer to their respective websites for full license details.
 ## 🙏 Acknowledgements
 
 A heartfelt project created for Theo Santos & Alisha Shakya-Santos to celebrate and share their wonderful news in a uniquely memorable way!
-�
+
